@@ -29,8 +29,8 @@
 
 <br>1. Add Direct link of GSI</br>
 
-if you use link form sourceforge.net ,
-<br>⚬ copy downlad link from your gsi then you will get link like this,</br>
+Sourceforge example:
+<br>⚬ Copy download link from your GSI then you will get link like this,</br>
  ```sh
 https://sourceforge.net/projects/andyyan-gsi/files/lineage-19.x/lineage-19.1-20230715-UNOFFICIAL-a64_bgN.img.xz/download
  ```
@@ -40,7 +40,7 @@ https://sourceforge.net/projects/andyyan-gsi/files/lineage-19.x/lineage-19.1-202
  ```
 <br>⚬ the link must be end with .xz .img .7z .gz</br>
 
-<br>2. Add Architecuter</br>
+<br>2. Add Architecture</br>
 <br>⚬ then add the arch as 32 or 64</br>
 
 <br>3. Add Rom Name (*For identification purposes*)<br>
