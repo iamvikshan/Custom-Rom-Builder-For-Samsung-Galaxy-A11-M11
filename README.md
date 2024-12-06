@@ -15,7 +15,8 @@
 # If you want to build arm64 custom rom, 
 
 <br>⚬ You MUST use PHH based GSIs above Android 10</br>
-<br>⚬ ~~You can use Erfan/Nippon GSIs Android 10/11/12 only~~ *Might not work nor boot up*</br>
+<br>⚬ ~~You can use Erfan/Nippon GSIs Android 10/11/12 only~~ 
+*Might not work nor boot up*</br>
 
 <br>⚬ Bugs in arm64</br>
 <br>⚬ MTP/PTP</br>
@@ -47,7 +48,7 @@ https://sourceforge.net/projects/andyyan-gsi/files/lineage-19.x/lineage-19.1-202
 like this LineageOS_19.1_SDM439_ARM32_Gapps
 
 <br>4. Download & Extract the zip file<br>
-<br>⚬ cause the script is designed to compress the real flashable rom inside the one the user named it<br>
+<br>⚬ cause the script is designed to compress the real flashable rom inside the one the user named it
 in the workflow page.
 
 # ⚬Telegram
