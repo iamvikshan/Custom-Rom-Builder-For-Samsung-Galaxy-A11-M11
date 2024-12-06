@@ -1,5 +1,5 @@
-# Custom Rom Builder For Samsung Galaxy A11/M11
-### 2024 - Working as expected 
+# Semi-Automatic Custom ROM Builder [A11-M11\]
+### I call it SACROMB - 2024 - Working as expected 
 
 <br>⚬ This tool can create full flashble zip with any gsi</br>
 </br>⚬ This tool support both arm32 and arm64</br>
