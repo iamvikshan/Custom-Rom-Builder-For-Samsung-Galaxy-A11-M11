@@ -4,20 +4,23 @@ on:
   push:
     branches:
       - main  # Change this to your desired branch
+
   workflow_dispatch:
     inputs:
-      GSI: 'https://sourceforge.net/projects/andyyan-gsi/files/lineage-21-td/lineage-21.0-20250621-UNOFFICIAL-arm64_bvS.img.gz/download'
-        description: 'direct link for Gsi image '
+      GSI:
+        description: 'Direct link for GSI image'
         required: true
-        default: 'https://sourceforge.net/projects/andyyan-gsi/files/lineage-19.x/lineage-19.1-20230715-UNOFFICIAL-a64_bgN.img.xz'        
-      ARCH: '64'
+        default: 'https://sourceforge.net/projects/andyyan-gsi/files/lineage-19.x/lineage-19.1-20230715-UNOFFICIAL-a64_bgN.img.xz'
+
+      ARCH:
         description: 'ARM64 or ARM32?'
         required: true
-        default: '32'                
-      NAME: 'pixel 21'
-        description: 'Rom Name'
+        default: '32'
+
+      NAME:
+        description: 'ROM Name'
         required: true
-        default: 'LineageOS_19.1_A11_M11_ARM32_Gapps'                
+        default: 'LineageOS_19.1_A11_M11_ARM32_Gapps'
 
 jobs:
   Build:
@@ -31,7 +34,7 @@ jobs:
       run: |
         sudo apt update
         sudo apt install -y zip xz-utils unzip p7zip-full wget
-        
+
     - name: Preparing Files
       run: |
         wget https://sourceforge.net/projects/samsung-galaxy-a01-m01/files/a11q.zip
@@ -41,16 +44,17 @@ jobs:
 
     - name: Downloading your GSI
       run: |
-        wget -P "./temp" ${{ github.event.inputs.GSI }} 
+        mkdir -p ./temp
+        wget -O ./temp/gsi.img.gz "${{ github.event.inputs.GSI }}"
         chmod 755 *
         chmod 755 ./bin/*
 
     - name: Building
       run: |
         ./arm${{ github.event.inputs.ARCH }}_git
-        
+
     - name: Uploading The Zip
       uses: actions/upload-artifact@v4
       with:
-        name: ${{ github.event.inputs.NAME }}   # Replace with a suitable name
+        name: ${{ github.event.inputs.NAME }}
         path: zip/Custom_Rom_SDM450.zip
