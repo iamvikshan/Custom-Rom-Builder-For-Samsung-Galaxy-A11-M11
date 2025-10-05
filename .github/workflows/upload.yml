@@ -6,15 +6,15 @@ on:
       - main  # Change this to your desired branch
   workflow_dispatch:
     inputs:
-      GSI:
+      GSI: 'https://sourceforge.net/projects/andyyan-gsi/files/lineage-21-td/lineage-21.0-20250621-UNOFFICIAL-arm64_bvS.img.gz/download'
         description: 'direct link for Gsi image '
         required: true
         default: 'https://sourceforge.net/projects/andyyan-gsi/files/lineage-19.x/lineage-19.1-20230715-UNOFFICIAL-a64_bgN.img.xz'        
-      ARCH:
+      ARCH: '64'
         description: 'ARM64 or ARM32?'
         required: true
         default: '32'                
-      NAME:
+      NAME: 'pixel 21'
         description: 'Rom Name'
         required: true
         default: 'LineageOS_19.1_A11_M11_ARM32_Gapps'                
