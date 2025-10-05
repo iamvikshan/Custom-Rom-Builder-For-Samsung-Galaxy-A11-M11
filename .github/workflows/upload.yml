@@ -4,20 +4,23 @@ on:
   push:
     branches:
       - main  # Change this to your desired branch
+
   workflow_dispatch:
     inputs:
       GSI:
-        description: 'direct link for Gsi image '
+        description: 'Direct link for GSI image'
         required: true
-        default: 'https://sourceforge.net/projects/andyyan-gsi/files/lineage-19.x/lineage-19.1-20230715-UNOFFICIAL-a64_bgN.img.xz'        
+        default: 'https://sourceforge.net/projects/andyyan-gsi/files/lineage-19.x/lineage-19.1-20230715-UNOFFICIAL-a64_bgN.img.xz'
+
       ARCH:
         description: 'ARM64 or ARM32?'
         required: true
-        default: '32'                
+        default: '32'
+
       NAME:
-        description: 'Rom Name'
+        description: 'ROM Name'
         required: true
-        default: 'LineageOS_19.1_A11_M11_ARM32_Gapps'                
+        default: 'LineageOS_19.1_A11_M11_ARM32_Gapps'
 
 jobs:
   Build:
@@ -31,26 +34,27 @@ jobs:
       run: |
         sudo apt update
         sudo apt install -y zip xz-utils unzip p7zip-full wget
-        
+
     - name: Preparing Files
       run: |
         wget https://sourceforge.net/projects/samsung-galaxy-a01-m01/files/a11q.zip
-        git clone https://github.com/SamsungSDM439/Custom-Rom-Builder-For-Samsung-Galaxy-A01-M01
+        git clone https://github.com/abiES76/Custom-Rom-Builder-For-Samsung-Galaxy-A11-M11
         unzip a11q.zip
         rm -r a11q.zip
 
     - name: Downloading your GSI
       run: |
-        wget -P "./temp" ${{ github.event.inputs.GSI }} 
+        mkdir -p ./temp
+        wget -O ./temp/gsi.img.gz "${{ github.event.inputs.GSI }}"
         chmod 755 *
         chmod 755 ./bin/*
 
     - name: Building
       run: |
         ./arm${{ github.event.inputs.ARCH }}_git
-        
+
     - name: Uploading The Zip
-      uses: actions/upload-artifact@v2
+      uses: actions/upload-artifact@v4
       with:
-        name: ${{ github.event.inputs.NAME }}   # Replace with a suitable name
-        path: ./zip/Custom_Rom_SDM450.zip
+        name: ${{ github.event.inputs.NAME }}
+        path: zip/Custom_Rom_SDM450.zip
