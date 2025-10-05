@@ -1,24 +1,24 @@
-name: Custom Rom Builder Samsung Galaxy A11/M11
+name: Custom ROM Builder for Samsung Galaxy A11/M11
 
 on:
-  push:
-    branches:
-      - main  # Change this to your desired branch
+  #push:
+   # branches:
+    #  - main  # Change this to your desired branch
 
   workflow_dispatch:
     inputs:
       GSI:
-        description: 'Direct link for GSI image'
+        description: 'Direct link for the GSI image (SourceForge or GitHub release)'
         required: true
         default: 'https://sourceforge.net/projects/andyyan-gsi/files/lineage-19.x/lineage-19.1-20230715-UNOFFICIAL-a64_bgN.img.xz'
 
       ARCH:
-        description: 'ARM64 or ARM32?'
+        description: 'Architecture: 32 for ARM32, 64 for ARM64'
         required: true
         default: '32'
 
       NAME:
-        description: 'ROM Name'
+        description: 'ROM name for the final artifact'
         required: true
         default: 'LineageOS_19.1_A11_M11_ARM32_Gapps'
 
@@ -27,33 +27,60 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout Repository
-      uses: actions/checkout@v2
+    - name: 🧾 Checkout Repository
+      uses: actions/checkout@v4
 
-    - name: Install Dependencies
+    - name: 🧰 Install Dependencies
       run: |
         sudo apt update
-        sudo apt install -y zip xz-utils unzip p7zip-full wget
+        sudo apt install -y zip xz-utils unzip p7zip-full wget file
 
-    - name: Preparing Files
+    - name: 📂 Prepare Files
       run: |
         wget https://sourceforge.net/projects/samsung-galaxy-a01-m01/files/a11q.zip
         git clone https://github.com/abiES76/Custom-Rom-Builder-For-Samsung-Galaxy-A11-M11
         unzip a11q.zip
         rm -r a11q.zip
 
-    - name: Downloading your GSI
+    - name: 🔽 Downloading and Extracting GSI
       run: |
         mkdir -p ./temp
-        wget -O ./temp/gsi.img.gz "${{ github.event.inputs.GSI }}"
+        cd ./temp
+        
+        echo "🔗 Downloading from: ${{ github.event.inputs.GSI }}"
+        wget -L -O gsi_download "${{ github.event.inputs.GSI }}"
+        
+        echo "🧠 Detecting file type..."
+        FILE_TYPE=$(file gsi_download)
+        echo "Detected type: $FILE_TYPE"
+        
+        if echo "$FILE_TYPE" | grep -qi 'gzip compressed'; then
+          echo "🧩 Extracting GZIP (.gz)..."
+          gunzip -c gsi_download > gsi.img
+          rm gsi_download
+        elif echo "$FILE_TYPE" | grep -qi 'XZ compressed'; then
+          echo "🧩 Extracting XZ (.xz)..."
+          unxz -c gsi_download > gsi.img
+          rm gsi_download
+        else
+          echo "📦 File not compressed — using as-is."
+          mv gsi_download gsi.img
+        fi
+        
+        echo "✅ Extraction complete: $(ls -lh gsi.img)"
+        
+        # Optional: Validate that image exists
+        [ -f gsi.img ] || { echo "❌ GSI extraction failed."; exit 1; }
+
+        cd ..
         chmod 755 *
         chmod 755 ./bin/*
 
-    - name: Building
+    - name: 🏗️ Building Custom ROM
       run: |
         ./arm${{ github.event.inputs.ARCH }}_git
 
-    - name: Uploading The Zip
+    - name: 📤 Upload Final ZIP
       uses: actions/upload-artifact@v4
       with:
         name: ${{ github.event.inputs.NAME }}
